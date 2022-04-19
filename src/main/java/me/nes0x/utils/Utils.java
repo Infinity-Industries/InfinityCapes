@@ -1,5 +1,6 @@
 package me.nes0x.utils;
 
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.Role;
@@ -14,6 +15,7 @@ import java.util.List;
 
 public class Utils {
     public final static String PREFIX = ";";
+    public final static EventWaiter EVENT_WAITER = new EventWaiter();
 
     public static MessageEmbed createEmbed(String title, Color color, String description, String imageURL) {
         EmbedBuilder embed = new EmbedBuilder();

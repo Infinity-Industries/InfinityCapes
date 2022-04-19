@@ -55,7 +55,8 @@ public class Bot {
                 new CreateVoucher(service),
                 new Voucher(service),
                 new Item(service),
-                new RemoveItem(service)
+                new RemoveItem(service),
+                new Broadcast()
         );
         client.setCoOwnerIds("520174583593304065", "893863477423259671");
         client.setActivity(Activity.playing("https://infinity.lisianora.xyz"));
@@ -66,7 +67,8 @@ public class Bot {
                         client.build(),
                         new BotMention(),
                         new InfinityCommands(),
-                        new Drop(service)
+                        new Drop(service),
+                        Utils.EVENT_WAITER
                 )
                 .enableIntents(GatewayIntent.GUILD_MEMBERS)
                 .build();
