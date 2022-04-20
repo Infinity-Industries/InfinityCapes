@@ -18,7 +18,7 @@ public class Broadcast extends Command {
     public Broadcast() {
         name = "broadcast";
         arguments = "<id-kanału>";
-        help = "Tworzenie ogłoszeń.";
+        help = "Komenda dla administracji. Tworzy i wysyła ogłoszenie na podany kanał.";
         requiredRole = "*";
     }
 

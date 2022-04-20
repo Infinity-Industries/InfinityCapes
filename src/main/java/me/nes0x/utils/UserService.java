@@ -1,9 +1,6 @@
 package me.nes0x.utils;
 
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.*;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONObject;
 
@@ -12,8 +9,8 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Timestamp;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
@@ -126,8 +123,15 @@ public class UserService {
         JSONObject json = read(user);
         String nick = json.getString("nick");
 
-        if (id.startsWith("a_") || id.startsWith("p_")) {
-            if (!json.getJSONArray("capes").toList().contains(id) && !roles.contains(guild.getRolesByName("*", true).get(0))) {
+        if (id.toLowerCase().startsWith("p_")) {
+            if (!json.getJSONArray("capes").toList().contains(id)
+                    && !roles.contains(guild.getRolesByName("*", true).get(0))
+                    && !roles.contains(guild.getRoleById("953404036634255450"))) {
+                return false;
+            }
+        } else if (id.toLowerCase().startsWith("a_")) {
+            if (!json.getJSONArray("capes").toList().contains(id)
+                    && !roles.contains(guild.getRolesByName("*", true).get(0))) {
                 return false;
             }
         }
@@ -156,7 +160,7 @@ public class UserService {
                 });
     }
 
-    public boolean getInformation(String nick, TextChannel channel) throws IOException {
+    public boolean getInformation(String nick, TextChannel channel, Guild guild) throws IOException {
         Stream<Path> path = Files.walk(Path.of("./users"));
 
         return path.filter(Files::isRegularFile)
@@ -173,12 +177,23 @@ public class UserService {
                                     ? "`brak`" : "`" + json.getJSONArray("capes") + "`";
                             String items = json.getJSONArray("items").isEmpty()
                                     ? "`brak`" : "`" + json.getJSONArray("items") + "`";
+                            String discordId = file.toFile().getName().replace(".json", "");
+
+                            Member member = guild.retrieveMemberById(discordId).complete();
+                            if (member.getRoles().contains(
+                                    guild.getRolesByName("*", true).get(0))) {
+                               capes = "`wszystkie`";
+                               items = "`wszystkie`";
+                            } else if (member.getRoles().contains(guild.getRoleById("953404036634255450"))) {
+                                capes = capes.equalsIgnoreCase("`brak`") ? "`premium`" : "`premium`, " + capes;
+                            }
+
                             channel.sendMessageEmbeds(
                                     Utils.createEmbed(
                                             "Sukces!",
                                             Color.GREEN,
                                             "Nick: `" + nick + "`"
-                                                    + "\nId discord: `" + file.toFile().getName().replace(".json", "") + "`"
+                                                    + "\nId discord: `" + discordId + "`"
                                                     + "\nAktualnie założona pelerynka: " + activeCape
                                                     + "\nAktualnie założone itemy: " + activeItems
                                                     + "\nDostępne dodatkowe peleryny: " + capes
@@ -379,7 +394,7 @@ public class UserService {
             List<Object> selectedList = drop.getJSONArray(type).toList();
             String selected = String.valueOf(selectedList.get(random.nextInt(selectedList.size())));
 
-            if (true) {
+            if (random.nextInt(261) >= 250) {
                 member.openPrivateChannel().queue(
                         channel -> {
                             try {
@@ -387,8 +402,8 @@ public class UserService {
                                 channel.sendMessageEmbeds(Utils.createEmbed(
                                         "Gratulacje!",
                                         Color.GREEN,
-                                        "Udało Ci się wygrać " + type + " o id: `" +  selected + "`!\nWpisz `"
-                                        + Utils.PREFIX + "voucher " + type + " " + voucher + "` aby odebrać nagrodę (Pamiętaj, że może to być duplikat)!" ,
+                                        "Udało Ci się wygrać " + type + " o id: `" + selected + "`!\nWpisz `"
+                                                + Utils.PREFIX + "voucher " + type + " " + voucher + "` aby odebrać nagrodę (Pamiętaj, że może to być duplikat)!",
                                         null
                                 )).queue();
                             } catch (IOException exception) {

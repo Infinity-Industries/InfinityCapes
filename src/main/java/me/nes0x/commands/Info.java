@@ -34,12 +34,12 @@ public class Info extends Command {
         String nick = args[1];
 
         try {
-            if (!service.getInformation(nick, commandEvent.getTextChannel())) {
+            if (!service.getInformation(nick, commandEvent.getTextChannel(), commandEvent.getGuild())) {
                 commandEvent.getTextChannel().sendMessageEmbeds(
                         Utils.createEmbed(
                                 "Błąd!",
                                 Color.RED,
-                                "Nie ma takiego konta lub wystąpił nieoczekiwany błąd",
+                                "Nie ma takiego konta lub wystąpił nieoczekiwany błąd!",
                                 null
                         )
                 ).queue();
