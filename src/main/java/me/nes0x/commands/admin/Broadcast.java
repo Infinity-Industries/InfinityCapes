@@ -1,10 +1,8 @@
-package me.nes0x.commands;
+package me.nes0x.commands.admin;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import me.nes0x.Bot;
 import me.nes0x.utils.Utils;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
@@ -15,10 +13,11 @@ import java.util.concurrent.TimeUnit;
 
 public class Broadcast extends Command {
 
-    public Broadcast() {
+    public Broadcast(final Category category) {
+        this.category = category;
         name = "broadcast";
         arguments = "<id-kanału>";
-        help = "Komenda dla administracji. Tworzy i wysyła ogłoszenie na podany kanał.";
+        help = "Tworzy i wysyła ogłoszenie na podany kanał.";
         requiredRole = "*";
     }
 

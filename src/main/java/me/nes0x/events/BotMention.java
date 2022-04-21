@@ -14,8 +14,9 @@ public class BotMention extends ListenerAdapter {
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
         RuntimeMXBean uptimeMs = ManagementFactory.getRuntimeMXBean();
-        if (event.getMessage().getContentRaw().equalsIgnoreCase("<@!961255531694133248>")
-                || event.getMessage().getContentRaw().equalsIgnoreCase("<@961255531694133248>")
+        String message = event.getMessage().getContentRaw();
+        if (message.equalsIgnoreCase("<@!961255531694133248>")
+                || message.equalsIgnoreCase("<@961255531694133248>")
                 && !event.getAuthor().isBot()) {
             int time = (int) (uptimeMs.getUptime() / 60000);
             MessageEmbed botMentioned = Utils.createEmbed("Hejka, jestem InfinityCapes",

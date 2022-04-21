@@ -4,6 +4,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import me.nes0x.utils.UserService;
 import me.nes0x.utils.Utils;
+import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.awt.*;
 import java.io.IOException;
@@ -11,8 +12,9 @@ import java.io.IOException;
 public class Cape extends Command {
     private final UserService service;
 
-    public Cape(final UserService service) {
+    public Cape(final UserService service, final Category category) {
         this.service = service;
+        this.category = category;
         name = "cape";
         arguments = "<id>";
         help = "Zmienia pelerynke.";
@@ -21,8 +23,9 @@ public class Cape extends Command {
     @Override
     protected void execute(final CommandEvent commandEvent) {
         String[] args = commandEvent.getMessage().getContentRaw().split("\\s+");
+        TextChannel channel = commandEvent.getTextChannel();
         if (args.length != 2) {
-            commandEvent.getTextChannel().sendMessageEmbeds(
+            channel.sendMessageEmbeds(
                     Utils.createEmbed("Błąd!",
                             Color.RED,
                             "Nie podałeś id peleryny!",
@@ -34,7 +37,7 @@ public class Cape extends Command {
 
         try {
             if (service.changeCape(commandEvent.getAuthor().getId(), id, commandEvent.getMember().getRoles(), commandEvent.getGuild())) {
-                commandEvent.getTextChannel().sendMessageEmbeds(
+                channel.sendMessageEmbeds(
                         Utils.createEmbed(
                                 "Sukces!",
                                 Color.GREEN,
@@ -48,7 +51,7 @@ public class Cape extends Command {
         }
 
 
-        commandEvent.getTextChannel().sendMessageEmbeds(
+        channel.sendMessageEmbeds(
                 Utils.createEmbed("Błąd!",
                         Color.RED,
                         "Nie masz założonego konta, taka peleryna nie istnieje lub wystąpił nieoczekiwany błąd!",

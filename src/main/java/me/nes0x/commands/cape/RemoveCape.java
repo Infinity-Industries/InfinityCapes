@@ -4,6 +4,7 @@ import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import me.nes0x.utils.UserService;
 import me.nes0x.utils.Utils;
+import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.awt.*;
 import java.io.IOException;
@@ -11,8 +12,9 @@ import java.io.IOException;
 public class RemoveCape extends Command {
     private final UserService service;
 
-    public RemoveCape(final UserService service) {
+    public RemoveCape(final UserService service, final Category category) {
         this.service = service;
+        this.category = category;
         name = "remove-cape";
         help = "Usuwa pelerynke którą aktualnie używasz.";
     }
@@ -20,9 +22,10 @@ public class RemoveCape extends Command {
 
     @Override
     protected void execute(final CommandEvent commandEvent) {
+        TextChannel channel = commandEvent.getTextChannel();
         try {
             if (service.removeCape(commandEvent.getAuthor().getId())) {
-                commandEvent.getTextChannel().sendMessageEmbeds(
+                channel.sendMessageEmbeds(
                         Utils.createEmbed(
                                 "Sukces!",
                                 Color.GREEN,
@@ -38,7 +41,7 @@ public class RemoveCape extends Command {
         }
 
 
-        commandEvent.getTextChannel().sendMessageEmbeds(
+        channel.sendMessageEmbeds(
                 Utils.createEmbed(
                         "Błąd!",
                         Color.RED,

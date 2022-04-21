@@ -9,11 +9,8 @@ public class InfinityCommands extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-
         if (event.getMessage().getChannel().getId().equalsIgnoreCase("963103413174956092")) {
             event.getMessage().delete().queueAfter(5, TimeUnit.SECONDS);
         }
-
     }
-
 }

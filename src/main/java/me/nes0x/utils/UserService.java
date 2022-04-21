@@ -169,6 +169,7 @@ public class UserService {
                         JSONObject json = read(file.toFile());
                         if (json.getString("nick").equalsIgnoreCase(nick)) {
 
+                            String nickFromJson = "`" + json.getString("nick") + "`";
                             String activeCape = json.getString("active-cape").isBlank()
                                     ? "`brak`" : "`" + json.getString("active-cape") + "`";
                             String activeItems = json.getJSONArray("active-items").isEmpty()
@@ -192,7 +193,7 @@ public class UserService {
                                     Utils.createEmbed(
                                             "Sukces!",
                                             Color.GREEN,
-                                            "Nick: `" + nick + "`"
+                                            "Nick: " + nickFromJson
                                                     + "\nId discord: `" + discordId + "`"
                                                     + "\nAktualnie założona pelerynka: " + activeCape
                                                     + "\nAktualnie założone itemy: " + activeItems

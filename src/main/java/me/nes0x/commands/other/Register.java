@@ -1,17 +1,19 @@
-package me.nes0x.commands.security;
+package me.nes0x.commands.other;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import me.nes0x.utils.UserService;
 import me.nes0x.utils.Utils;
+import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.awt.*;
 
 public class Register extends Command {
     private final UserService service;
 
-    public Register(final UserService service) {
+    public Register(final UserService service, final Category category) {
         this.service = service;
+        this.category = category;
         name = "register";
         arguments = "<nick>";
         help = "Rejestracja do systemu pelerynek InfinityCapes.";
@@ -20,9 +22,10 @@ public class Register extends Command {
     @Override
     protected void execute(final CommandEvent commandEvent) {
         String[] args = commandEvent.getMessage().getContentRaw().split("\\s+");
+        TextChannel channel = commandEvent.getTextChannel();
 
         if (args.length != 2) {
-            commandEvent.getTextChannel().sendMessageEmbeds(
+            channel.sendMessageEmbeds(
                     Utils.createEmbed("Błąd!",
                             Color.RED,
                             "Nie podałeś nicku!",
@@ -34,7 +37,7 @@ public class Register extends Command {
 
         try {
             if (service.register(nick, commandEvent.getAuthor().getId())) {
-                commandEvent.getTextChannel().sendMessageEmbeds(
+                channel.sendMessageEmbeds(
                         Utils.createEmbed("Sukces!",
                                 Color.GREEN,
                                 "Założyłeś konto na nick: `" + nick + "`",
@@ -46,7 +49,7 @@ public class Register extends Command {
             exception.printStackTrace();
         }
 
-        commandEvent.getTextChannel().sendMessageEmbeds(
+        channel.sendMessageEmbeds(
                 Utils.createEmbed(
                         "Błąd!",
                         Color.RED,

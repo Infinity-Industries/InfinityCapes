@@ -1,9 +1,10 @@
-package me.nes0x.commands.voucher;
+package me.nes0x.commands.other;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import me.nes0x.utils.UserService;
 import me.nes0x.utils.Utils;
+import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.awt.*;
 import java.io.IOException;
@@ -11,8 +12,9 @@ import java.io.IOException;
 public class Voucher extends Command {
     private final UserService service;
 
-    public Voucher(final UserService service) {
+    public Voucher(final UserService service, final Category category) {
         this.service = service;
+        this.category = category;
         name = "voucher";
         arguments = "<item/cape> <id>";
         help = "Możliwość odebrania peleryny/itemu.";
@@ -22,8 +24,9 @@ public class Voucher extends Command {
     @Override
     protected void execute(final CommandEvent commandEvent) {
         String[] args = commandEvent.getMessage().getContentRaw().split("\\s+");
+        TextChannel channel = commandEvent.getTextChannel();
         if (args.length != 3) {
-            commandEvent.getTextChannel().sendMessageEmbeds(
+            channel.sendMessageEmbeds(
                     Utils.createEmbed("Błąd!",
                             Color.RED,
                             "Nie podałeś argumentów!",
@@ -37,7 +40,7 @@ public class Voucher extends Command {
         String voucher = args[2];
 
         if (!type.equalsIgnoreCase("cape") && !type.equalsIgnoreCase("item")) {
-            commandEvent.getTextChannel().sendMessageEmbeds(
+            channel.sendMessageEmbeds(
                     Utils.createEmbed("Błąd!",
                             Color.RED,
                             "Musisz wybrać pomiędzy itemem a peleryną!",
@@ -48,7 +51,7 @@ public class Voucher extends Command {
 
         try {
             if (service.applyVoucher(type, voucher, commandEvent.getAuthor().getId())) {
-                commandEvent.getTextChannel().sendMessageEmbeds(
+                channel.sendMessageEmbeds(
                         Utils.createEmbed("Sukces!",
                                 Color.GREEN,
                                 "Odebrałeś voucher.",
@@ -60,7 +63,7 @@ public class Voucher extends Command {
             exception.printStackTrace();
         }
 
-        commandEvent.getTextChannel().sendMessageEmbeds(
+        channel.sendMessageEmbeds(
                 Utils.createEmbed("Błąd!",
                         Color.RED,
                         "Taki voucher nie istnieje, nie masz założonego konta lub wystąpił nieoczekiwany błąd!",

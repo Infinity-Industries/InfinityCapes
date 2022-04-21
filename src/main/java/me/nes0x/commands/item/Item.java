@@ -5,6 +5,7 @@ import com.jagrosh.jdautilities.command.CommandEvent;
 import me.nes0x.utils.UserService;
 import me.nes0x.utils.Utils;
 import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.awt.*;
 import java.io.IOException;
@@ -12,8 +13,9 @@ import java.io.IOException;
 public class Item extends Command {
     private final UserService service;
 
-    public Item(final UserService service) {
+    public Item(final UserService service, final Category category) {
         this.service = service;
+        this.category = category;
         name = "item";
         arguments = "<id>";
         help = "Nakłada podany item.";
@@ -21,10 +23,10 @@ public class Item extends Command {
 
     @Override
     protected void execute(final CommandEvent commandEvent) {
-
         String[] args = commandEvent.getMessage().getContentRaw().split("\\s+");
+        TextChannel channel = commandEvent.getTextChannel();
         if (args.length != 2) {
-            commandEvent.getTextChannel().sendMessageEmbeds(
+            channel.sendMessageEmbeds(
                     Utils.createEmbed("Błąd!",
                             Color.RED,
                             "Nie podałeś id itemu!",
@@ -37,7 +39,7 @@ public class Item extends Command {
 
         try {
             if (service.addItem(id, commandEvent.getAuthor().getId(), commandEvent.getMember().getRoles(), role)) {
-                commandEvent.getTextChannel().sendMessageEmbeds(
+                channel.sendMessageEmbeds(
                         Utils.createEmbed("Sukces!",
                                 Color.GREEN,
                                 "Pomyślnie nałożyłeś item: `" + id + "`!",
@@ -49,7 +51,7 @@ public class Item extends Command {
             exception.printStackTrace();
         }
 
-        commandEvent.getTextChannel().sendMessageEmbeds(
+        channel.sendMessageEmbeds(
                 Utils.createEmbed("Błąd!",
                         Color.RED,
                         "Nie masz założonego konta, nie posiadasz tego itemu, masz go już nałożonego, taki item nie istnieje lub wystąpił nieoczekiwany błąd!",

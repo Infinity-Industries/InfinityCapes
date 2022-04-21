@@ -1,18 +1,18 @@
-package me.nes0x.commands;
+package me.nes0x.commands.admin;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import me.nes0x.utils.Utils;
-import net.dv8tion.jda.api.entities.Role;
 
 import java.awt.*;
 
 public class Embed extends Command {
-    public Embed() {
+    public Embed(final Category category) {
+        this.category = category;
         requiredRole = "*";
         name = "embed";
         arguments = "<skin/item/cape> <id> <id-kanału> <url-obrazka>";
-        help = "Komenda dla administracji. Tworzy embed z itemem/skinem/capem/kitem (id, obrazek).";
+        help = "Tworzy embed z itemem/skinem/capem/kitem (id, obrazek).";
     }
 
     @Override
