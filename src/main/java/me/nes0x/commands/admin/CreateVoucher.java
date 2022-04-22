@@ -21,7 +21,7 @@ public class CreateVoucher extends Command {
         requiredRole = "*";
         name = "create-voucher";
         arguments = "<item/cape> <id>";
-        help = "Tworzy voucher z itemem/peleryną";
+        help = "Tworzy voucher z itemem/peleryną.";
     }
 
     @Override

@@ -10,8 +10,8 @@ import java.awt.*;
 import java.io.File;
 import java.util.List;
 
-public class ItemAdd extends Command {
-    public ItemAdd(final Category category) {
+public class AddItem extends Command {
+    public AddItem(final Category category) {
         this.category = category;
         name = "item-add";
         requiredRole = "*";

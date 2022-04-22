@@ -2,7 +2,6 @@ package me.nes0x.commands.admin;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import me.nes0x.utils.UserService;
 import me.nes0x.utils.Utils;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -11,8 +10,8 @@ import java.awt.*;
 import java.io.File;
 import java.util.List;
 
-public class CapeAdd extends Command {
-    public CapeAdd(final Category category) {
+public class AddCape extends Command {
+    public AddCape(final Category category) {
         this.category = category;
         name = "cape-add";
         requiredRole = "*";
@@ -39,13 +38,25 @@ public class CapeAdd extends Command {
                                 Utils.createEmbed("Błąd!", Color.RED, "Podałeś plik który nie jest peleryną!", null)
                         ).queue();
                     } else {
-                        attachment.downloadToFile(new File("./capes/" + attachment.getFileName()));
-                        channel.sendMessageEmbeds(
-                                        Utils.createEmbed("Sukces!",
-                                                Color.GREEN,
-                                                "Dodałeś peleryne o id `"
-                                                        + attachment.getFileName().replace(".png", "") + "`", null))
-                                .queue();
+                        File cape = new File("./capes/" + attachment.getFileName());
+                        if (!cape.exists()) {
+                            attachment.downloadToFile(cape);
+                            channel.sendMessageEmbeds(
+                                            Utils.createEmbed("Sukces!",
+                                                    Color.GREEN,
+                                                    "Dodałeś peleryne o id `"
+                                                            + attachment.getFileName().replace(".png", "") + "`", null))
+                                    .queue();
+                        } else {
+                            channel.sendMessageEmbeds(
+                                            Utils.createEmbed("Błąd!",
+                                                    Color.RED,
+                                                    "Taka peleryna już istnieje!",
+                                                            null))
+                                    .queue();
+                        }
+
+
                     }
                 }
         );

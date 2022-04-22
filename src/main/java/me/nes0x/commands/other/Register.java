@@ -16,7 +16,7 @@ public class Register extends Command {
         this.category = category;
         name = "register";
         arguments = "<nick>";
-        help = "Rejestracja do systemu pelerynek InfinityCapes.";
+        help = "Rejestracja do systemu InfinityCapes.";
     }
 
     @Override

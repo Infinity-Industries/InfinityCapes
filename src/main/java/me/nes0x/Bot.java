@@ -1,17 +1,12 @@
 package me.nes0x;
 
 import com.jagrosh.jdautilities.command.CommandClientBuilder;
-import me.nes0x.commands.admin.Broadcast;
-import me.nes0x.commands.admin.Embed;
+import me.nes0x.commands.admin.*;
 import me.nes0x.commands.cape.Cape;
-import me.nes0x.commands.admin.CapeAdd;
 import me.nes0x.commands.cape.RemoveCape;
 import me.nes0x.commands.item.Item;
-import me.nes0x.commands.admin.ItemAdd;
 import me.nes0x.commands.item.RemoveItem;
 import me.nes0x.commands.other.*;
-import me.nes0x.commands.admin.UnregisterAdmin;
-import me.nes0x.commands.admin.CreateVoucher;
 import me.nes0x.events.BotMention;
 import me.nes0x.events.Drop;
 import me.nes0x.events.InfinityCommands;
@@ -66,8 +61,9 @@ public class Bot {
                 new Embed(Utils.ADMIN_CATEGORY),
                 new CreateVoucher(service, Utils.ADMIN_CATEGORY),
                 new Broadcast(Utils.ADMIN_CATEGORY),
-                new CapeAdd(Utils.ADMIN_CATEGORY),
-                new ItemAdd(Utils.ADMIN_CATEGORY)
+                new AddCape(Utils.ADMIN_CATEGORY),
+                new AddItem(Utils.ADMIN_CATEGORY),
+                new ChangeDrop(service, Utils.ADMIN_CATEGORY)
         );
         client.setCoOwnerIds("520174583593304065", "893863477423259671");
         client.setActivity(Activity.playing("https://infinity.lisianora.xyz"));
@@ -76,7 +72,7 @@ public class Bot {
         JDABuilder.createLight(System.getenv("BOT_TOKEN"), GatewayIntent.GUILD_MESSAGES, GatewayIntent.DIRECT_MESSAGES)
                 .addEventListeners(
                         client.build(),
-                        new BotMention(),
+                        new BotMention(service),
                         new InfinityCommands(),
                         new Drop(service),
                         Utils.EVENT_WAITER

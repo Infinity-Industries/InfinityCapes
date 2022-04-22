@@ -16,7 +16,7 @@ public class Unregister extends Command {
         this.service = service;
         this.category = category;
         name = "unregister";
-        help = "Usuwa z systemu pelerynek InfinityCapes. **(UWAGA, STRACISZ WSZYSTKIE ODBLOKOWANE PELERYNY I ITEMY!)**";
+        help = "Odrejestrowanie z systemu InfinityCapes. **(UWAGA, STRACISZ WSZYSTKIE ODBLOKOWANE PELERYNY I ITEMY!)**";
     }
 
     @Override

@@ -395,7 +395,7 @@ public class UserService {
             List<Object> selectedList = drop.getJSONArray(type).toList();
             String selected = String.valueOf(selectedList.get(random.nextInt(selectedList.size())));
 
-            if (random.nextInt(261) >= 250) {
+            if (random.nextInt(251) >= 220) {
                 member.openPrivateChannel().queue(
                         channel -> {
                             try {
@@ -407,6 +407,14 @@ public class UserService {
                                                 + Utils.PREFIX + "voucher " + type + " " + voucher + "` aby odebrać nagrodę (Pamiętaj, że może to być duplikat)!",
                                         null
                                 )).queue();
+
+                                File dropFile = new File("./drop.json");
+                                if (dropFile.exists()) {
+                                    JSONObject jsonDrop = read(dropFile);
+                                    jsonDrop.put("winners", jsonDrop.getInt("winners") + 1);
+                                    save(dropFile, jsonDrop.toString());
+                                }
+
                             } catch (IOException exception) {
                                 exception.printStackTrace();
                             }
@@ -419,6 +427,42 @@ public class UserService {
         } else {
             return "Musisz poczekać jeszcze " + (60 - minutes) + " minut.";
         }
+    }
+
+    public boolean changeDrop(String type, String id, boolean remove) throws IOException {
+        File drop = new File("./drop.json");
+
+        if (!drop.exists()){
+            return false;
+        }
+
+        JSONObject json = read(drop);
+        List<Object> drops = json.getJSONArray(type).toList();
+
+
+        if (remove) {
+            if (!drops.contains(id)) {
+                return false;
+            }
+            drops.remove(id);
+        } else {
+            if (drops.contains(id)) {
+                return false;
+            }
+            drops.add(id);
+        }
+
+        json.put(type, drops);
+        return save(drop, json.toString());
+    }
+
+    public int winnersNumber() throws IOException {
+        File drop = new File("./drop.json");
+        if (!drop.exists()) {
+            return 0;
+        }
+        JSONObject json = read(drop);
+        return json.getInt("winners");
     }
 
 }
