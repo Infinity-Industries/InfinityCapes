@@ -13,7 +13,7 @@ import java.util.List;
 public class AddCape extends Command {
     public AddCape(final Category category) {
         this.category = category;
-        name = "cape-add";
+        name = "add-cape";
         requiredRole = "*";
         arguments = "<dołącz pelerynke do komendy>";
         help = "Dodaje na serwer peleryne dołączoną do komendy.";

@@ -38,20 +38,8 @@ public class CreateVoucher extends Command {
             ).queue();
             return;
         }
-
-
         String type = args[1].toLowerCase();
         String id = args[2];
-
-        if (!type.equalsIgnoreCase("cape") && !type.equalsIgnoreCase("item")) {
-            channel.sendMessageEmbeds(
-                    Utils.createEmbed("Błąd!",
-                            Color.RED,
-                            "Musisz wybrać pomiędzy itemem a peleryną!",
-                            null)
-            ).queue();
-            return;
-        }
 
         try {
             String voucher = service.createVoucher(type, id);
@@ -76,15 +64,12 @@ public class CreateVoucher extends Command {
             exception.printStackTrace();
         }
 
-        user.openPrivateChannel().queue(userChannel -> {
-            userChannel.sendMessageEmbeds(Utils.createEmbed(
-                    "Błąd!",
-                    Color.RED,
-                    "Wystąpił nieoczekiwany błąd przy tworzeniu vouchera!",
-                    null
-            )).queue();
-        });
-
+        channel.sendMessageEmbeds(Utils.createEmbed(
+                "Błąd!",
+                Color.RED,
+                "Nie wybrałeś odpowiedniego typu vouchera lub wystąpił nieoczekiwany błąd!",
+                null
+        )).queue();
 
     }
 }

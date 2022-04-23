@@ -43,15 +43,15 @@ public class Utils {
         StringBuilder timeToReturn = new StringBuilder();
 
         if (!(time / 60 > 0)) {
-            timeToReturn.append("\n").append(time).append(" minut/y");
+            timeToReturn.append("\n").append("`").append(time).append(" minut/y`");
         }
 
         if (time / 60 > 0 && !(time / 1440 > 0)) {
-            timeToReturn.append("\n").append(time / 60).append(" godzin/y");
+            timeToReturn.append("\n").append("`").append(time / 60).append(" godzin/y`");
         }
 
         if (time / 1440 > 0) {
-            timeToReturn.append("\n").append(time / 1440).append(" dni");
+            timeToReturn.append("\n").append("`").append(time / 1440).append(" dni`");
         }
 
 

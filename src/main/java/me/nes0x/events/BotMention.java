@@ -36,7 +36,7 @@ public class BotMention extends ListenerAdapter {
                                 + "\nWpisz `" + Utils.PREFIX + "help` aby poznać listę komend"
                                 + "\nIlość zarejestrowanych kont: `" + new File("./users").listFiles().length + "`"
                                 + "\nWygranych w dropie: `" + service.winnersNumber()   + "`"
-                                + "\nDziałam od:" + Utils.minutesToTime(time),
+                                + "\nDziałam od: " + Utils.minutesToTime(time),
                         null);
             } catch (IOException exception) {
                 exception.printStackTrace();

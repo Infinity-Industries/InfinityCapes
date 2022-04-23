@@ -13,7 +13,7 @@ import java.util.List;
 public class AddItem extends Command {
     public AddItem(final Category category) {
         this.category = category;
-        name = "item-add";
+        name = "add-item";
         requiredRole = "*";
         arguments = "<id> <dołącz model.cfg, texture.png - w takiej kolejności do komendy>";
         help = "Dodaje na serwer item dołączony do komendy.";

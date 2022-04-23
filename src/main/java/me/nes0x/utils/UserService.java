@@ -126,7 +126,7 @@ public class UserService {
         if (id.toLowerCase().startsWith("p_")) {
             if (!json.getJSONArray("capes").toList().contains(id)
                     && !roles.contains(guild.getRolesByName("*", true).get(0))
-                    && !roles.contains(guild.getRoleById("953404036634255450"))) {
+                    && !roles.contains(guild.getRoleById("813562303358173294"))) {
                 return false;
             }
         } else if (id.toLowerCase().startsWith("a_")) {
@@ -183,9 +183,9 @@ public class UserService {
                             Member member = guild.retrieveMemberById(discordId).complete();
                             if (member.getRoles().contains(
                                     guild.getRolesByName("*", true).get(0))) {
-                               capes = "`wszystkie`";
-                               items = "`wszystkie`";
-                            } else if (member.getRoles().contains(guild.getRoleById("953404036634255450"))) {
+                                capes = "`wszystkie`";
+                                items = "`wszystkie`";
+                            } else if (member.getRoles().contains(guild.getRoleById("813562303358173294"))) {
                                 capes = capes.equalsIgnoreCase("`brak`") ? "`premium`" : "`premium`, " + capes;
                             }
 
@@ -256,6 +256,11 @@ public class UserService {
 
     public String createVoucher(String type, String id) throws IOException {
         File vouchersFile = new File("./vouchers-" + type + ".json");
+
+        if (!vouchersFile.exists()) {
+            return null;
+        }
+
         String voucher = Long.toHexString(Double.doubleToLongBits(Math.random()));
 
         JSONObject json = read(vouchersFile);
@@ -266,11 +271,44 @@ public class UserService {
         return null;
     }
 
+    public boolean removeVoucher(String code, String type) throws IOException {
+        File vouchersFile = new File("./vouchers-" + type + ".json");
+
+        if (!vouchersFile.exists()) {
+            return false;
+        }
+
+        JSONObject json = read(vouchersFile);
+
+        if (json.getString(code) == null) {
+            return false;
+        }
+        json.remove(code);
+        return save(vouchersFile, json.toString());
+    }
+
+    public MessageEmbed dropList() throws IOException {
+        File drops = new File("./drop.json");
+
+        if (!drops.exists()) {
+            return null;
+        }
+
+        JSONObject json = read(drops);
+
+        return Utils.createEmbed("Aktualny drop to:", Color.CYAN,
+                "Itemy: `" + json.getJSONArray("item").toList() + "`\nPeleryny: `"
+                        + json.getJSONArray("cape").toList() + "`", null);
+    }
+
     public boolean applyVoucher(String type, String voucher, String discordId) throws IOException {
         File vouchersFile = new File("./vouchers-" + type + ".json");
         File user = new File("./users/" + discordId + ".json");
 
         if (!user.exists()) {
+            return false;
+        }
+        if (!vouchersFile.exists()) {
             return false;
         }
 
@@ -432,7 +470,7 @@ public class UserService {
     public boolean changeDrop(String type, String id, boolean remove) throws IOException {
         File drop = new File("./drop.json");
 
-        if (!drop.exists()){
+        if (!drop.exists()) {
             return false;
         }
 
@@ -463,6 +501,28 @@ public class UserService {
         }
         JSONObject json = read(drop);
         return json.getInt("winners");
+    }
+
+    public MessageEmbed vouchersList() throws IOException {
+        File vouchersCapeFile = new File("./vouchers-cape.json");
+        File vouchersItemFile = new File("./vouchers-item.json");
+
+        if (!vouchersCapeFile.exists()) {
+            return null;
+        }
+        if (!vouchersItemFile.exists()) {
+            return null;
+        }
+
+        JSONObject cape = read(vouchersCapeFile);
+        JSONObject item = read(vouchersItemFile);
+
+        Map<String, Object> capeMap = cape.toMap();
+        Map<String, Object> itemMap = item.toMap();
+
+
+        return Utils.createEmbed("Aktualne vouchery to:", Color.CYAN, "Peleryny: `" + capeMap + "`\nItemy: `" + itemMap + "`", null);
+
     }
 
 }
