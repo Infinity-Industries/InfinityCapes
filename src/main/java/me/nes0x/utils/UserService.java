@@ -411,29 +411,30 @@ public class UserService {
             return "Nie masz konta.";
         }
 
-        JSONObject json = read(user);
-        long now = System.currentTimeMillis();
-        if (json.get("drop").toString().isEmpty()) {
-            json.put("drop", now);
-            save(user, json.toString());
+        JSONObject jsonUser = read(user);
+        long nowTime = System.currentTimeMillis();
+        if (jsonUser.get("drop").toString().isEmpty()) {
+            jsonUser.put("drop", nowTime);
+            save(user, jsonUser.toString());
             return "Nie udało Ci się tym razem wygrać, spróbuj ponownie za godzinę.";
         }
 
 
-        Timestamp stamp = new Timestamp(json.getLong("drop"));
+        Timestamp stamp = new Timestamp(jsonUser.getLong("drop"));
         long diffInMillis = (new Date()).getTime() - (new Date(stamp.getTime())).getTime();
         long minutes = TimeUnit.MINUTES.convert(diffInMillis, TimeUnit.MILLISECONDS);
         if (minutes >= 60) {
-            json.put("drop", now);
-            save(user, json.toString());
+            jsonUser.put("drop", nowTime);
+            save(user, jsonUser.toString());
             Random random = new Random();
-            JSONObject drop = read(new File("./drop.json"));
+            File dropFile = new File("./drop.json");
+            JSONObject drop = read(dropFile);
             List<String> typeList = Arrays.asList("cape", "item");
             String type = typeList.get(random.nextInt(typeList.size()));
             List<Object> selectedList = drop.getJSONArray(type).toList();
             String selected = String.valueOf(selectedList.get(random.nextInt(selectedList.size())));
 
-            if (random.nextInt(251) >= 220) {
+            if (random.nextInt(251) >= 242) {
                 member.openPrivateChannel().queue(
                         channel -> {
                             try {
@@ -442,17 +443,12 @@ public class UserService {
                                         "Gratulacje!",
                                         Color.GREEN,
                                         "Udało Ci się wygrać " + type + " o id: `" + selected + "`!\nWpisz `"
-                                                + Utils.PREFIX + "voucher " + type + " " + voucher + "` aby odebrać nagrodę (Pamiętaj, że może to być duplikat)!",
+                                                + Utils.PREFIX + "voucher " + type + " " + voucher +
+                                                "` aby odebrać nagrodę (Pamiętaj, że może to być duplikat)!",
                                         null
                                 )).queue();
-
-                                File dropFile = new File("./drop.json");
-                                if (dropFile.exists()) {
-                                    JSONObject jsonDrop = read(dropFile);
-                                    jsonDrop.put("winners", jsonDrop.getInt("winners") + 1);
-                                    save(dropFile, jsonDrop.toString());
-                                }
-
+                                drop.put("winners", drop.getInt("winners") + 1);
+                                save(dropFile, drop.toString());
                             } catch (IOException exception) {
                                 exception.printStackTrace();
                             }
@@ -520,8 +516,10 @@ public class UserService {
         Map<String, Object> capeMap = cape.toMap();
         Map<String, Object> itemMap = item.toMap();
 
-
-        return Utils.createEmbed("Aktualne vouchery to:", Color.CYAN, "Peleryny: `" + capeMap + "`\nItemy: `" + itemMap + "`", null);
+        return Utils.createEmbed("Aktualne vouchery to:",
+                Color.CYAN,
+                "Peleryny: `" + capeMap + "`\nItemy: `" + itemMap + "`",
+                null);
 
     }
 
