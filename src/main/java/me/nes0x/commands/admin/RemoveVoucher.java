@@ -3,7 +3,7 @@ package me.nes0x.commands.admin;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import me.nes0x.utils.UserService;
-import me.nes0x.utils.Utils;
+import me.nes0x.utils.BotUtils;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.awt.*;
@@ -17,7 +17,7 @@ public class RemoveVoucher extends Command {
         this.category = category;
         requiredRole = "*";
         name = "remove-voucher";
-        arguments = "<item/cape> <code>";
+        arguments = "<item/cape> <kod>";
         help = "Usuwa podany voucher.";
     }
 
@@ -29,7 +29,7 @@ public class RemoveVoucher extends Command {
 
         if (args.length != 3) {
             channel.sendMessageEmbeds(
-                    Utils.createEmbed("Błąd!",
+                    BotUtils.createEmbed("Błąd!",
                             Color.RED,
                             "Nie podałeś argumentów!",
                             null)
@@ -41,7 +41,7 @@ public class RemoveVoucher extends Command {
 
         try {
             if (service.removeVoucher(code, type)) {
-                channel.sendMessageEmbeds(Utils.createEmbed(
+                channel.sendMessageEmbeds(BotUtils.createEmbed(
                         "Sukces!",
                         Color.GREEN,
                         "Pomyślnie usunąłeś voucher `" + code + "`",
@@ -52,7 +52,7 @@ public class RemoveVoucher extends Command {
         } catch (IOException exception) {
             exception.printStackTrace();
         }
-        channel.sendMessageEmbeds(Utils.createEmbed(
+        channel.sendMessageEmbeds(BotUtils.createEmbed(
                 "Błąd!",
                 Color.RED,
                 "Taki voucher nie istnieje, nie podałeś dobrego typu lub wystąpił nieoczekiwany błąd!",

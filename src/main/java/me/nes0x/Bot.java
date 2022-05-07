@@ -11,7 +11,7 @@ import me.nes0x.events.BotMention;
 import me.nes0x.events.Drop;
 import me.nes0x.events.InfinityCommands;
 import me.nes0x.utils.UserService;
-import me.nes0x.utils.Utils;
+import me.nes0x.utils.BotUtils;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
@@ -39,34 +39,34 @@ public class Bot {
         UserService service = new UserService();
         CommandClientBuilder client = new CommandClientBuilder();
         client.setOwnerId("920440877594316840");
-        client.setPrefix(Utils.PREFIX);
+        client.setPrefix(BotUtils.PREFIX);
 
 
 
         client.addCommands(
                 //cape
-                new Cape(service, Utils.CAPES_CATEGORY),
-                new RemoveCape(service, Utils.CAPES_CATEGORY),
+                new Cape(service, BotUtils.CAPES_CATEGORY),
+                new RemoveCape(service, BotUtils.CAPES_CATEGORY),
                 //item
-                new Item(service, Utils.ITEMS_CATEGORY),
-                new RemoveItem(service, Utils.ITEMS_CATEGORY),
+                new Item(service, BotUtils.ITEMS_CATEGORY),
+                new RemoveItem(service, BotUtils.ITEMS_CATEGORY),
                 //other
-                new Register(service, Utils.OTHER_CATEGORY),
-                new Unregister(service, Utils.OTHER_CATEGORY),
-                new ChangeNick(service, Utils.OTHER_CATEGORY),
-                new DropList(service, Utils.OTHER_CATEGORY),
-                new Info(service, Utils.OTHER_CATEGORY),
-                new Voucher(service, Utils.OTHER_CATEGORY),
+                new Register(service, BotUtils.OTHER_CATEGORY),
+                new Unregister(service, BotUtils.OTHER_CATEGORY),
+                new ChangeNick(service, BotUtils.OTHER_CATEGORY),
+                new DropList(service, BotUtils.OTHER_CATEGORY),
+                new Info(service, BotUtils.OTHER_CATEGORY),
+                new Voucher(service, BotUtils.OTHER_CATEGORY),
                 //administration
-                new UnregisterAdmin(service, Utils.ADMIN_CATEGORY),
-                new Embed(Utils.ADMIN_CATEGORY),
-                new CreateVoucher(service, Utils.ADMIN_CATEGORY),
-                new RemoveVoucher(service, Utils.ADMIN_CATEGORY),
-                new VoucherList(service, Utils.ADMIN_CATEGORY),
-                new Broadcast(Utils.ADMIN_CATEGORY),
-                new AddCape(Utils.ADMIN_CATEGORY),
-                new AddItem(Utils.ADMIN_CATEGORY),
-                new ChangeDrop(service, Utils.ADMIN_CATEGORY)
+                new UnregisterAdmin(service, BotUtils.ADMIN_CATEGORY),
+                new Embed(BotUtils.ADMIN_CATEGORY),
+                new CreateVoucher(service, BotUtils.ADMIN_CATEGORY),
+                new RemoveVoucher(service, BotUtils.ADMIN_CATEGORY),
+                new VoucherList(service, BotUtils.ADMIN_CATEGORY),
+                new Broadcast(BotUtils.ADMIN_CATEGORY),
+                new AddCape(BotUtils.ADMIN_CATEGORY),
+                new AddItem(BotUtils.ADMIN_CATEGORY),
+                new ChangeDrop(service, BotUtils.ADMIN_CATEGORY)
         );
         client.setCoOwnerIds("520174583593304065", "893863477423259671");
         client.setActivity(Activity.playing("https://infinity.lisianora.xyz"));
@@ -78,7 +78,7 @@ public class Bot {
                         new BotMention(service),
                         new InfinityCommands(),
                         new Drop(service),
-                        Utils.EVENT_WAITER
+                        BotUtils.EVENT_WAITER
                 )
                 .enableIntents(GatewayIntent.GUILD_MEMBERS)
                 .build();

@@ -2,7 +2,8 @@ package me.nes0x.commands.admin;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import me.nes0x.utils.Utils;
+import me.nes0x.utils.BotUtils;
+import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.awt.*;
 
@@ -11,16 +12,16 @@ public class Embed extends Command {
         this.category = category;
         requiredRole = "*";
         name = "embed";
-        arguments = "<skin/item/cape> <id> <id-kanału> <url-obrazka>";
+        arguments = "<skin/item/cape> <id> <#kanał> <url-obrazka>";
         help = "Tworzy embed z itemem/skinem/capem/kitem (id, obrazek).";
     }
 
     @Override
     protected void execute(final CommandEvent commandEvent) {
         String[] args = commandEvent.getMessage().getContentRaw().split("\\s+");
-        if (args.length != 5) {
+        if (args.length != 5 || commandEvent.getMessage().getMentionedChannels().size() == 0) {
             commandEvent.getTextChannel().sendMessageEmbeds(
-                    Utils.createEmbed("Błąd!",
+                    BotUtils.createEmbed("Błąd!",
                             Color.RED,
                             "Nie podałeś argumentów!",
                             null)
@@ -30,7 +31,7 @@ public class Embed extends Command {
 
         String type = args[1];
         String typeId = args[2];
-        String id = args[3];
+        TextChannel channel = commandEvent.getMessage().getMentionedChannels().get(0);
         String url = args[4];
         String title, description;
 
@@ -42,18 +43,18 @@ public class Embed extends Command {
                 break;
             case "item":
                 title = "Item " + typeId;
-                description = "Aby nadać sobie ten item wpisz: `" + Utils.PREFIX + "item " + typeId + "`";
+                description = "Aby nadać sobie ten item wpisz: `" + BotUtils.PREFIX + "item " + typeId + "`";
                 break;
             case "cape":
                 title = "Pelerynka " + typeId;
-                description = "Aby nadać sobie tą pelerynke wpisz: `" + Utils.PREFIX + "cape " + typeId + "`";
+                description = "Aby nadać sobie tą pelerynke wpisz: `" + BotUtils.PREFIX + "cape " + typeId + "`";
                 break;
             default:
                 commandEvent.getTextChannel().sendMessage("Nie podałeś typu!").queue();
                 return;
         }
-        commandEvent.getGuild().getTextChannelById(id).sendMessageEmbeds(
-                Utils.createEmbed(title,
+        commandEvent.getGuild().getTextChannelById(channel.getId()).sendMessageEmbeds(
+                BotUtils.createEmbed(title,
                         Color.CYAN,
                         description,
                         url)

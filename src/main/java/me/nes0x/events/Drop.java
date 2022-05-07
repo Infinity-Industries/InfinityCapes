@@ -1,7 +1,7 @@
 package me.nes0x.events;
 
 import me.nes0x.utils.UserService;
-import me.nes0x.utils.Utils;
+import me.nes0x.utils.BotUtils;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -24,7 +24,7 @@ public class Drop extends ListenerAdapter {
                 try {
                     String message = service.checkDrop(event.getAuthor());
                         event.getTextChannel().sendMessageEmbeds(
-                                Utils.createEmbed(
+                                BotUtils.createEmbed(
                                         "Drop!",
                                         Color.CYAN,
                                         message,

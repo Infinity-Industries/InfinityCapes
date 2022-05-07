@@ -3,7 +3,7 @@ package me.nes0x.commands.admin;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import me.nes0x.utils.UserService;
-import me.nes0x.utils.Utils;
+import me.nes0x.utils.BotUtils;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.awt.*;
@@ -28,7 +28,7 @@ public class UnregisterAdmin extends Command {
         TextChannel channel = commandEvent.getTextChannel();
         if (args.length != 2) {
             channel.sendMessageEmbeds(
-                    Utils.createEmbed("Błąd!",
+                    BotUtils.createEmbed("Błąd!",
                             Color.RED,
                             "Nie podałeś id użytkownika!",
                             null)
@@ -39,7 +39,7 @@ public class UnregisterAdmin extends Command {
 
         try {
             if (service.unregister(discordId)) {
-                channel.sendMessageEmbeds(Utils.createEmbed(
+                channel.sendMessageEmbeds(BotUtils.createEmbed(
                                 "Sukces!",
                                 Color.GREEN,
                                 "Usunąłeś użytkownika o id: `" + discordId + "`!",
@@ -51,7 +51,7 @@ public class UnregisterAdmin extends Command {
         }
 
         channel.sendMessageEmbeds(
-                Utils.createEmbed(
+                BotUtils.createEmbed(
                         "Błąd!",
                         Color.RED,
                         "Taki użytkownik nie istnieje lub wystąpił nieoczekiwany błąd!",

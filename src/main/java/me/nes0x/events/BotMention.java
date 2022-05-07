@@ -1,7 +1,7 @@
 package me.nes0x.events;
 
 import me.nes0x.utils.UserService;
-import me.nes0x.utils.Utils;
+import me.nes0x.utils.BotUtils;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -29,14 +29,14 @@ public class BotMention extends ListenerAdapter {
             int time = (int) (uptimeMs.getUptime() / 60000);
             MessageEmbed botMentioned = null;
             try {
-                botMentioned = Utils.createEmbed("Hejka, jestem InfinityCapes",
+                botMentioned = BotUtils.createEmbed("Hejka, jestem InfinityCapes",
                         Color.CYAN,
                         "Zostałem zrobiony przez <@!920440877594316840> " +
-                                "\nMój prefix to: `" + Utils.PREFIX + "`"
-                                + "\nWpisz `" + Utils.PREFIX + "help` aby poznać listę komend"
+                                "\nMój prefix to: `" + BotUtils.PREFIX + "`"
+                                + "\nWpisz `" + BotUtils.PREFIX + "help` aby poznać listę komend"
                                 + "\nIlość zarejestrowanych kont: `" + new File("./users").listFiles().length + "`"
                                 + "\nWygranych w dropie: `" + service.winnersNumber()   + "`"
-                                + "\nDziałam od: " + Utils.minutesToTime(time),
+                                + "\nDziałam od: " + BotUtils.minutesToTime(time),
                         null);
             } catch (IOException exception) {
                 exception.printStackTrace();

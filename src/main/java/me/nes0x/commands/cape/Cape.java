@@ -3,7 +3,7 @@ package me.nes0x.commands.cape;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import me.nes0x.utils.UserService;
-import me.nes0x.utils.Utils;
+import me.nes0x.utils.BotUtils;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.awt.*;
@@ -26,7 +26,7 @@ public class Cape extends Command {
         TextChannel channel = commandEvent.getTextChannel();
         if (args.length != 2) {
             channel.sendMessageEmbeds(
-                    Utils.createEmbed("Błąd!",
+                    BotUtils.createEmbed("Błąd!",
                             Color.RED,
                             "Nie podałeś id peleryny!",
                             null)
@@ -38,7 +38,7 @@ public class Cape extends Command {
         try {
             if (service.changeCape(commandEvent.getAuthor().getId(), id, commandEvent.getMember().getRoles(), commandEvent.getGuild())) {
                 channel.sendMessageEmbeds(
-                        Utils.createEmbed(
+                        BotUtils.createEmbed(
                                 "Sukces!",
                                 Color.GREEN,
                                 "Zmieniłeś swoją pelerynke na: `" + id + "`",
@@ -52,7 +52,7 @@ public class Cape extends Command {
 
 
         channel.sendMessageEmbeds(
-                Utils.createEmbed("Błąd!",
+                BotUtils.createEmbed("Błąd!",
                         Color.RED,
                         "Nie masz założonego konta, taka peleryna nie istnieje lub wystąpił nieoczekiwany błąd!",
                         null)

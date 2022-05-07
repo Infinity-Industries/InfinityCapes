@@ -3,7 +3,7 @@ package me.nes0x.commands.other;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import me.nes0x.utils.UserService;
-import me.nes0x.utils.Utils;
+import me.nes0x.utils.BotUtils;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.awt.*;
@@ -26,7 +26,7 @@ public class ChangeNick extends Command {
         TextChannel channel = commandEvent.getTextChannel();
         if (args.length != 2) {
             channel.sendMessageEmbeds(
-                    Utils.createEmbed("Błąd!",
+                    BotUtils.createEmbed("Błąd!",
                             Color.RED,
                             "Nie podałeś nowego nicku!",
                             null)
@@ -39,7 +39,7 @@ public class ChangeNick extends Command {
             if (service.changeNick(commandEvent.getAuthor().getId(), newNick)) {
                 channel
                         .sendMessageEmbeds(
-                                Utils.createEmbed(
+                                BotUtils.createEmbed(
                                         "Sukces!",
                                         Color.GREEN,
                                         "Twój nick został zmieniony na: `" + newNick + "`!",
@@ -53,7 +53,7 @@ public class ChangeNick extends Command {
 
         channel
                 .sendMessageEmbeds(
-                        Utils.createEmbed(
+                        BotUtils.createEmbed(
                                 "Błąd!",
                                 Color.RED,
                                 "Nie masz konta, taki nick już jest zajęty lub wystąpił nieoczekiwany błąd!",

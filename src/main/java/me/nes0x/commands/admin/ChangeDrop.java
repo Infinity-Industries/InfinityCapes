@@ -3,7 +3,7 @@ package me.nes0x.commands.admin;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import me.nes0x.utils.UserService;
-import me.nes0x.utils.Utils;
+import me.nes0x.utils.BotUtils;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.awt.*;
@@ -27,7 +27,7 @@ public class ChangeDrop extends Command {
         String[] args = commandEvent.getMessage().getContentRaw().split("\\s+");
         if (args.length != 4) {
             channel.sendMessageEmbeds(
-                    Utils.createEmbed(
+                    BotUtils.createEmbed(
                             "Błąd",
                             Color.RED,
                             "Nie podałeś argumentów!",
@@ -43,7 +43,7 @@ public class ChangeDrop extends Command {
 
         if (!action.equalsIgnoreCase("remove") && !action.equalsIgnoreCase("add")) {
             channel.sendMessageEmbeds(
-                    Utils.createEmbed(
+                    BotUtils.createEmbed(
                             "Błąd",
                             Color.RED,
                             "Musisz wybrać czy chcesz usunąć czy dodać!",
@@ -56,7 +56,7 @@ public class ChangeDrop extends Command {
         try {
             if (service.changeDrop(type, id, action.equalsIgnoreCase("remove"))) {
                 channel.sendMessageEmbeds(
-                        Utils.createEmbed("Sukces!",
+                        BotUtils.createEmbed("Sukces!",
                                 Color.GREEN,
                                 "Pomyślnie dokonałeś akcje.",
                                 null)
@@ -68,7 +68,7 @@ public class ChangeDrop extends Command {
         }
 
         channel.sendMessageEmbeds(
-                Utils.createEmbed("Błąd!",
+                BotUtils.createEmbed("Błąd!",
                         Color.RED,
                         "Taka rzecz już jest dodana, nie ma jej lub wystąpił nieoczekiwany błąd.",
                         null)

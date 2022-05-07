@@ -2,10 +2,8 @@ package me.nes0x.commands.admin;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import com.jagrosh.jdautilities.examples.doc.Author;
 import me.nes0x.utils.UserService;
-import me.nes0x.utils.Utils;
-import net.dv8tion.jda.api.entities.Member;
+import me.nes0x.utils.BotUtils;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.User;
 
@@ -31,7 +29,7 @@ public class CreateVoucher extends Command {
         User user = commandEvent.getAuthor();
         if (args.length != 3) {
             channel.sendMessageEmbeds(
-                    Utils.createEmbed("Błąd!",
+                    BotUtils.createEmbed("Błąd!",
                             Color.RED,
                             "Nie podałeś argumentów!",
                             null)
@@ -45,7 +43,7 @@ public class CreateVoucher extends Command {
             String voucher = service.createVoucher(type, id);
             if (voucher != null) {
                 user.openPrivateChannel().queue(userChannel -> {
-                    userChannel.sendMessageEmbeds(Utils.createEmbed(
+                    userChannel.sendMessageEmbeds(BotUtils.createEmbed(
                             "Sukces!",
                             Color.GREEN,
                             "Wygenerowany voucher " + type + " dla `" + id + "` to: `" + voucher + "`",
@@ -53,7 +51,7 @@ public class CreateVoucher extends Command {
                     )).queue();
                 });
                 channel.sendMessageEmbeds(
-                        Utils.createEmbed("Sukces!",
+                        BotUtils.createEmbed("Sukces!",
                                 Color.GREEN,
                                 "Sprawdź wiadomość prywatną z voucherem od bota!",
                                 null)
@@ -64,7 +62,7 @@ public class CreateVoucher extends Command {
             exception.printStackTrace();
         }
 
-        channel.sendMessageEmbeds(Utils.createEmbed(
+        channel.sendMessageEmbeds(BotUtils.createEmbed(
                 "Błąd!",
                 Color.RED,
                 "Nie wybrałeś odpowiedniego typu vouchera lub wystąpił nieoczekiwany błąd!",

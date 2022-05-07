@@ -3,7 +3,7 @@ package me.nes0x.commands.other;
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
 import me.nes0x.utils.UserService;
-import me.nes0x.utils.Utils;
+import me.nes0x.utils.BotUtils;
 import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.awt.*;
@@ -27,7 +27,7 @@ public class Voucher extends Command {
         TextChannel channel = commandEvent.getTextChannel();
         if (args.length != 3) {
             channel.sendMessageEmbeds(
-                    Utils.createEmbed("Błąd!",
+                    BotUtils.createEmbed("Błąd!",
                             Color.RED,
                             "Nie podałeś argumentów!",
                             null)
@@ -41,7 +41,7 @@ public class Voucher extends Command {
 
         if (!type.equalsIgnoreCase("cape") && !type.equalsIgnoreCase("item")) {
             channel.sendMessageEmbeds(
-                    Utils.createEmbed("Błąd!",
+                    BotUtils.createEmbed("Błąd!",
                             Color.RED,
                             "Musisz wybrać pomiędzy itemem a peleryną!",
                             null)
@@ -52,7 +52,7 @@ public class Voucher extends Command {
         try {
             if (service.applyVoucher(type, voucher, commandEvent.getAuthor().getId())) {
                 channel.sendMessageEmbeds(
-                        Utils.createEmbed("Sukces!",
+                        BotUtils.createEmbed("Sukces!",
                                 Color.GREEN,
                                 "Odebrałeś voucher.",
                                 null)
@@ -64,7 +64,7 @@ public class Voucher extends Command {
         }
 
         channel.sendMessageEmbeds(
-                Utils.createEmbed("Błąd!",
+                BotUtils.createEmbed("Błąd!",
                         Color.RED,
                         "Taki voucher nie istnieje, nie masz założonego konta lub wystąpił nieoczekiwany błąd!",
                         null)

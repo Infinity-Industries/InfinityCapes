@@ -2,7 +2,7 @@ package me.nes0x.commands.admin;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import me.nes0x.utils.Utils;
+import me.nes0x.utils.BotUtils;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 
@@ -27,14 +27,14 @@ public class AddItem extends Command {
 
         if (args.length != 2) {
             channel.sendMessageEmbeds(
-                    Utils.createEmbed("Błąd!", Color.RED, "Nie podałeś jaki ten item ma mieć id!", null)
+                    BotUtils.createEmbed("Błąd!", Color.RED, "Nie podałeś jaki ten item ma mieć id!", null)
             ).queue();
             return;
         }
 
         if (attachments.size() != 2) {
             channel.sendMessageEmbeds(
-                    Utils.createEmbed("Błąd!", Color.RED, "Nie dodałeś wymaganych plików!", null)
+                    BotUtils.createEmbed("Błąd!", Color.RED, "Nie dodałeś wymaganych plików!", null)
             ).queue();
             return;
         }
@@ -45,7 +45,7 @@ public class AddItem extends Command {
         if (!model.getFileExtension().equalsIgnoreCase("cfg")
                 && !texture.getFileExtension().equalsIgnoreCase("png")) {
             channel.sendMessageEmbeds(
-                    Utils.createEmbed("Błąd!", Color.RED, "Dodałeś złe pliki!", null)
+                    BotUtils.createEmbed("Błąd!", Color.RED, "Dodałeś złe pliki!", null)
             ).queue();
             return;
         }
@@ -54,7 +54,7 @@ public class AddItem extends Command {
 
         if (itemDir.exists()) {
             channel.sendMessageEmbeds(
-                    Utils.createEmbed("Błąd!", Color.RED, "Taki item już istnieje!", null)
+                    BotUtils.createEmbed("Błąd!", Color.RED, "Taki item już istnieje!", null)
             ).queue();
             return;
         }
@@ -62,13 +62,13 @@ public class AddItem extends Command {
             model.downloadToFile(new File("/var/www/html/items/" + id + "/model.cfg"));
             texture.downloadToFile(new File("/var/www/html/items/" + id + "/texture.png"));
             channel.sendMessageEmbeds(
-                    Utils.createEmbed("Sukces!", Color.GREEN, "Dodałeś item o id `" + id + "`!", null)
+                    BotUtils.createEmbed("Sukces!", Color.GREEN, "Dodałeś item o id `" + id + "`!", null)
             ).queue();
             return;
         }
 
         channel.sendMessageEmbeds(
-                Utils.createEmbed("Błąd!", Color.RED, "Wystąpił nieoczekiwany błąd!", null)
+                BotUtils.createEmbed("Błąd!", Color.RED, "Wystąpił nieoczekiwany błąd!", null)
         ).queue();
     }
 }

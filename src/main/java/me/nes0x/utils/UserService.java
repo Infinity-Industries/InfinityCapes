@@ -17,31 +17,48 @@ import java.util.stream.Stream;
 public class UserService {
 
 
-    private boolean save(File file, String json) {
-        PrintWriter writer;
+    private boolean save(File file, JSONObject json) {
+        PrintWriter writer = null;
         try {
             writer = new PrintWriter(new FileWriter(file));
-            writer.write(json);
+            writer.write(json.toString());
             writer.flush();
             writer.close();
             return true;
         } catch (Exception exception) {
             exception.printStackTrace();
             return false;
+        } finally {
+            if (writer != null) {
+                writer.close();
+            }
         }
     }
 
     private JSONObject read(File file) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(file));
-        StringBuffer buffer = new StringBuffer();
-        String text;
-
-        while ((text = reader.readLine()) != null) {
-            buffer.append(text);
+        BufferedReader reader = null;
+        try {
+            reader = new BufferedReader(new FileReader(file));
+            StringBuilder builder = new StringBuilder();
+            String text;
+            while ((text = reader.readLine()) != null) {
+                builder.append(text);
+            }
+            reader.close();
+            return new JSONObject(builder.toString());
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        } finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException exception) {
+                    exception.printStackTrace();
+                }
+            }
         }
-        reader.close();
-        String jsonText = buffer.toString();
-        return new JSONObject(jsonText);
+
+        return null;
     }
 
     private boolean checkNick(String nick) throws IOException {
@@ -65,11 +82,7 @@ public class UserService {
     public boolean register(String nick, String discordId) throws Exception {
         File user = new File("./users/" + discordId + ".json");
 
-        if (user.exists()) {
-            return false;
-        }
-
-        if (checkNick(nick)) {
+        if (user.exists() || checkNick(nick)) {
             return false;
         }
 
@@ -83,7 +96,7 @@ public class UserService {
             json.put("capes", (Collection<String>) null);
             json.put("items", (Collection<String>) null);
             json.put("drop", "");
-            return save(user, json.toString()) && save(new File("/var/www/html/users/" + nick + ".cfg"), items.toString());
+            return save(user, json) && save(new File("/var/www/html/users/" + nick + ".cfg"), items);
         }
         return false;
     }
@@ -153,7 +166,7 @@ public class UserService {
                         }
                         cape = new File("/var/www/html/capes/" + id + ".png");
                         json.put("active-cape", id);
-                        save(user, json.toString());
+                        save(user, json);
                         return cape.renameTo(new File("/var/www/html/capes/" + nick + ".png"));
                     }
                     return false;
@@ -190,7 +203,7 @@ public class UserService {
                             }
 
                             channel.sendMessageEmbeds(
-                                    Utils.createEmbed(
+                                    BotUtils.createEmbed(
                                             "Sukces!",
                                             Color.GREEN,
                                             "Nick: " + nickFromJson
@@ -235,7 +248,7 @@ public class UserService {
         }
 
         json.put("nick", newNick);
-        return isCapeChanged && isItemsChanged && save(user, json.toString());
+        return isCapeChanged && isItemsChanged && save(user, json);
     }
 
     public boolean removeCape(String discordId) throws IOException {
@@ -249,7 +262,7 @@ public class UserService {
 
         if (cape.exists() && cape.delete()) {
             json.put("active-cape", "");
-            return save(user, json.toString());
+            return save(user, json);
         }
         return false;
     }
@@ -265,7 +278,7 @@ public class UserService {
 
         JSONObject json = read(vouchersFile);
         json.put(voucher, id);
-        if (save(vouchersFile, json.toString())) {
+        if (save(vouchersFile, json)) {
             return voucher;
         }
         return null;
@@ -284,7 +297,7 @@ public class UserService {
             return false;
         }
         json.remove(code);
-        return save(vouchersFile, json.toString());
+        return save(vouchersFile, json);
     }
 
     public MessageEmbed dropList() throws IOException {
@@ -296,7 +309,7 @@ public class UserService {
 
         JSONObject json = read(drops);
 
-        return Utils.createEmbed("Aktualny drop to:", Color.CYAN,
+        return BotUtils.createEmbed("Aktualny drop to:", Color.CYAN,
                 "Itemy: `" + json.getJSONArray("item").toList() + "`\nPeleryny: `"
                         + json.getJSONArray("cape").toList() + "`", null);
     }
@@ -332,7 +345,7 @@ public class UserService {
         values.add(voucherValue);
         jsonVouchers.remove(voucher);
         jsonUser.put(type + "s", values);
-        return save(vouchersFile, jsonVouchers.toString()) && save(user, jsonUser.toString());
+        return save(vouchersFile, jsonVouchers) && save(user, jsonUser);
     }
 
 
@@ -377,7 +390,7 @@ public class UserService {
 
         userActiveItems.add(id);
         json.put("active-items", userActiveItems);
-        return save(user, json.toString()) && save(userItems, jsonItems.toString());
+        return save(user, json) && save(userItems, jsonItems);
     }
 
     public boolean removeItem(String id, String discordId) throws IOException {
@@ -402,7 +415,7 @@ public class UserService {
         jsonItems.put("items", userActiveItems);
         items.remove(id);
         json.put("active-items", items);
-        return save(user, json.toString()) && save(userItems, jsonItems.toString());
+        return save(user, json) && save(userItems, jsonItems);
     }
 
     public String checkDrop(User member) throws IOException {
@@ -415,7 +428,7 @@ public class UserService {
         long nowTime = System.currentTimeMillis();
         if (jsonUser.get("drop").toString().isEmpty()) {
             jsonUser.put("drop", nowTime);
-            save(user, jsonUser.toString());
+            save(user, jsonUser);
             return "Nie udało Ci się tym razem wygrać, spróbuj ponownie za godzinę.";
         }
 
@@ -425,7 +438,7 @@ public class UserService {
         long minutes = TimeUnit.MINUTES.convert(diffInMillis, TimeUnit.MILLISECONDS);
         if (minutes >= 60) {
             jsonUser.put("drop", nowTime);
-            save(user, jsonUser.toString());
+            save(user, jsonUser);
             Random random = new Random();
             File dropFile = new File("./drop.json");
             JSONObject drop = read(dropFile);
@@ -439,16 +452,16 @@ public class UserService {
                         channel -> {
                             try {
                                 String voucher = createVoucher(type, selected);
-                                channel.sendMessageEmbeds(Utils.createEmbed(
+                                channel.sendMessageEmbeds(BotUtils.createEmbed(
                                         "Gratulacje!",
                                         Color.GREEN,
                                         "Udało Ci się wygrać " + type + " o id: `" + selected + "`!\nWpisz `"
-                                                + Utils.PREFIX + "voucher " + type + " " + voucher +
+                                                + BotUtils.PREFIX + "voucher " + type + " " + voucher +
                                                 "` aby odebrać nagrodę (Pamiętaj, że może to być duplikat)!",
                                         null
                                 )).queue();
                                 drop.put("winners", drop.getInt("winners") + 1);
-                                save(dropFile, drop.toString());
+                                save(dropFile, drop);
                             } catch (IOException exception) {
                                 exception.printStackTrace();
                             }
@@ -487,7 +500,7 @@ public class UserService {
         }
 
         json.put(type, drops);
-        return save(drop, json.toString());
+        return save(drop, json);
     }
 
     public int winnersNumber() throws IOException {
@@ -516,7 +529,7 @@ public class UserService {
         Map<String, Object> capeMap = cape.toMap();
         Map<String, Object> itemMap = item.toMap();
 
-        return Utils.createEmbed("Aktualne vouchery to:",
+        return BotUtils.createEmbed("Aktualne vouchery to:",
                 Color.CYAN,
                 "Peleryny: `" + capeMap + "`\nItemy: `" + itemMap + "`",
                 null);

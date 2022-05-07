@@ -2,7 +2,7 @@ package me.nes0x.commands.admin;
 
 import com.jagrosh.jdautilities.command.Command;
 import com.jagrosh.jdautilities.command.CommandEvent;
-import me.nes0x.utils.Utils;
+import me.nes0x.utils.BotUtils;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
 
@@ -26,7 +26,7 @@ public class AddCape extends Command {
 
         if (attachments.isEmpty()) {
             channel.sendMessageEmbeds(
-                Utils.createEmbed("Błąd!", Color.RED, "Nie dodałeś peleryny do komendy!", null)
+                BotUtils.createEmbed("Błąd!", Color.RED, "Nie dodałeś peleryny do komendy!", null)
             ).queue();
             return;
         }
@@ -35,21 +35,21 @@ public class AddCape extends Command {
                 attachment -> {
                     if (!attachment.getFileExtension().equalsIgnoreCase("png")) {
                         channel.sendMessageEmbeds(
-                                Utils.createEmbed("Błąd!", Color.RED, "Podałeś plik który nie jest peleryną!", null)
+                                BotUtils.createEmbed("Błąd!", Color.RED, "Podałeś plik który nie jest peleryną!", null)
                         ).queue();
                     } else {
                         File cape = new File("./capes/" + attachment.getFileName());
                         if (!cape.exists()) {
                             attachment.downloadToFile(cape);
                             channel.sendMessageEmbeds(
-                                            Utils.createEmbed("Sukces!",
+                                            BotUtils.createEmbed("Sukces!",
                                                     Color.GREEN,
                                                     "Dodałeś peleryne o id `"
                                                             + attachment.getFileName().replace(".png", "") + "`", null))
                                     .queue();
                         } else {
                             channel.sendMessageEmbeds(
-                                            Utils.createEmbed("Błąd!",
+                                            BotUtils.createEmbed("Błąd!",
                                                     Color.RED,
                                                     "Taka peleryna już istnieje!",
                                                             null))

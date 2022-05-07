@@ -11,7 +11,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class Utils {
+public class BotUtils {
     public final static String PREFIX = ";";
     public final static EventWaiter EVENT_WAITER = new EventWaiter();
     public final static Command.Category CAPES_CATEGORY = new Command.Category("Peleryny");
@@ -42,19 +42,20 @@ public class Utils {
     public static String minutesToTime(int time) {
         StringBuilder timeToReturn = new StringBuilder();
 
-        if (!(time / 60 > 0)) {
-            timeToReturn.append("\n").append("`").append(time).append(" minut/y`");
+        if (time / 1440 > 0) {
+            timeToReturn.append("\n").append("`").append(time / 1440).append(" dni`");
+            time -= (time / 1440) * 1440;
         }
 
         if (time / 60 > 0 && !(time / 1440 > 0)) {
             timeToReturn.append("\n").append("`").append(time / 60).append(" godzin/y`");
+            time -= (time / 60) * 60;
         }
 
-        if (time / 1440 > 0) {
-            timeToReturn.append("\n").append("`").append(time / 1440).append(" dni`");
+        if (time != 0) {
+            timeToReturn.append("\n").append("`").append(time).append(" minut/y`");
+
         }
-
-
         return timeToReturn.toString();
     }
 }
